@@ -3,4 +3,9 @@ chardet
 pytz
 twilio
 pandas
+requests
+chardet
+pytz
+twilio
+pandas
 numpy
