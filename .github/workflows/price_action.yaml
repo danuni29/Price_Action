@@ -30,6 +30,7 @@ jobs:
     - name: Commit and push changes
       run: |
         git config --global user.name "Da Eun Ha"
+        git config --global user.email "hekdms@jbnu.ac.kr"
         git add ./output/*.csv
         git commit -m "Update Weather Data - $(TZ='Asia/Seoul' date +'%Y-%m-%d')"
         git push
