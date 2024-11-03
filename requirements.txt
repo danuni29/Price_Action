@@ -9,3 +9,9 @@ pytz
 twilio
 pandas
 numpy
+streamlit
+matplotlib
+seaborn
+plotly
+plotly-calplot
+Flask
