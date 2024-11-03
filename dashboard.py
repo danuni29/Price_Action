@@ -32,6 +32,13 @@ def detail_page(item):
     if st.button("뒤로 가기"):  # 뒤로 가기 버튼
         st.session_state.selected_item = None  # 선택 초기화
 
+def adjust_weekend_to_friday(row):
+    if row['date'].weekday() == 5:  # 토요일 (weekday()는 월요일이 0, 일요일이 6)
+        return row['date'] - pd.Timedelta(days=1)  # 금요일로 이동
+    elif row['date'].weekday() == 6:  # 일요일
+        return row['date'] - pd.Timedelta(days=2)  # 금요일로 이동
+    return row['date']
+
 
 
 def main():
@@ -55,7 +62,6 @@ def main():
         "2주일 전": "dpr4",
         "1달 전": "dpr5",
         "1년 전": "dpr6",
-        # "연평균": "dpr7"
     }
 
     # 비교 기간 선택

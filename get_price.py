@@ -35,6 +35,7 @@ def main():
 
     desired_timezone = pytz.timezone('Asia/Seoul')
     day = datetime.now(desired_timezone)
+    print(day.weekday())
     today = day.strftime('%Y-%m-%d')
 
 
@@ -81,7 +82,12 @@ def main():
                     each_data = pd.DataFrame(js['data']['item'])
                     each_data['date'] = today
                     # print(f"{each_data}=each_data")
-                    each_data.to_csv(f"{output_folder}/total.csv", mode='w', index=False)
+                    # 주말은 건너뛰기
+                    if day.weekday() >= 5:
+                        continue
+
+                    else:
+                        each_data.to_csv(f"{output_folder}/total.csv", mode='w', index=False)
                     # print('저장완료')
 
                 else:
@@ -134,9 +140,6 @@ def main():
     account_sid = 'AC6e9b818ca2ffc02dc8f85b51c6447041'
     auth_token = 'b3e9fe52e754160431cd20b63ca9c134'
     client = Client(account_sid, auth_token)
-
-    # UTF-8 인코딩 설정
-    # sys.stdout.reconfigure(encoding='utf-8')
 
     # CSV 파일 URL
     url = 'https://raw.githubusercontent.com/danuni29/Price_Action/refs/heads/master/output/전주/total.csv'
