@@ -4,3 +4,4 @@ __pycache__
 regions_price_selection.csv
 phone.py
 get_price_kk.py
+get_price_test.py
