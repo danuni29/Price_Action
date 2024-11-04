@@ -28,7 +28,6 @@ def main():
     # print(info_data.columns)
 
     # KAMIS API 기본 URL
-    # api_url = "http://www.kamis.or.kr/service/price/xml.do?action=periodProductList"
     api_url = "http://www.kamis.or.kr/service/price/xml.do?action=dailyPriceByCategoryList"
 
     info_data = { '1101': '서울', '2100': '부산', '3511':'전주'}
@@ -38,23 +37,13 @@ def main():
     print(day.weekday())
     today = day.strftime('%Y-%m-%d')
 
-
     # 각 지역에 대해 API 호출 파라미터를 설정하고 저장
     for region_code, region_name in info_data.items():
-        # region_code = row["code"]
-        # region_name = row["region"]
+
 
         # 지역별 output 폴더 경로 설정
         output_folder = f'./output/{region_name}'
-        os.makedirs(output_folder, exist_ok=True)  # 폴더가 없으면 생성
-
-        # 각 날짜에 대해 데이터를 가져옴
-        # for date in tqdm(date_range, desc=f"Processing {region_name} ({region_code})"):
-        #     formatted_date = date.strftime('%Y-%m-%d')
-        #     print(formatted_date)
-
-            # 파라미터 설정
-        print(str(region_code))
+        os.makedirs(output_folder, exist_ok=True)
 
 
         params = f'&{quote_plus("p_cert_key")}=50c892c3-9a7b-4c46-81e1-c9cc776f476c&' + urlencode({
@@ -75,9 +64,6 @@ def main():
             try:
                 # JSON 데이터를 파싱하고 데이터 구조 확인
                 js = json.loads(response.content)
-                # print(js)
-
-                # 'data'와 'item' 키 존재 여부를 검사하고 데이터프레임 생성
                 if 'data' in js and isinstance(js['data'], dict) and 'item' in js['data']:
                     each_data = pd.DataFrame(js['data']['item'])
                     each_data['date'] = today
@@ -85,13 +71,12 @@ def main():
                     # 주말은 건너뛰기
                     if day.weekday() >= 5:
                         continue
-
                     else:
                         each_data.to_csv(f"{output_folder}/total.csv", mode='w', index=False)
                     # print('저장완료')
 
                 else:
-                    print(f"Unexpected data format for {region_name} ({region_code}) on : Skipping")
+                    print(f"Unexpected data format")
 
 
                 each_data['date'] = today
@@ -143,9 +128,6 @@ def main():
 
     # CSV 파일 URL
     url = 'https://raw.githubusercontent.com/danuni29/Price_Action/refs/heads/master/output/전주/total.csv'
-
-    # CSV 파일 읽기
-    # data = pd.read_csv(url)
 
     data = download_csv_from_github(url)
     # print(data)
